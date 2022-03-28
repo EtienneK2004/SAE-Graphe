@@ -31,7 +31,6 @@ class GrapheMATest {
 		assertEquals(2, g.dIn(4));
 		assertEquals(2, g.dIn(5));
 		assertEquals(0, g.dIn(6));
-		System.out.println(g.toString());
 		assertTrue(g.toString().contentEquals(
 		"0 1 1 1 1 0 \n"+
 		"0 0 0 0 1 0 \n"+

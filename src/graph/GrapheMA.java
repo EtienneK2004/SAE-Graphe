@@ -26,15 +26,15 @@ public class GrapheMA {
 	
 	public int dOut(int entrant) {
 		int cpt = 0;
-		for(boolean elem : matriceAdj[entrant-1])
-			if(elem)
+		for(boolean arc : matriceAdj[entrant-1])
+			if(arc)
 				cpt++;
 		return cpt;
 	}
 	
 	public int dIn(int sortant) {
 		int cpt = 0;
-		for(int i = 0; i < matriceAdj.length; i++)
+		for(int i = 0; i < getNbNoeuds(); i++)
 			if(matriceAdj[i][sortant-1])
 				cpt++;
 		return cpt;
@@ -44,8 +44,8 @@ public class GrapheMA {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(boolean[] ligne : matriceAdj) {
-			for(boolean elem : ligne) {
-				if(elem) 
+			for(boolean arc : ligne) {
+				if(arc) 
 					sb.append("1 ");
 				else
 					sb.append("0 ");
