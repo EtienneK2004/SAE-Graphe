@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class GrapheMATest {
+class GrapheLATest {
 	private final static int NB_NOEUDS = 6;
 	@Test
 	void test() {
@@ -32,11 +32,13 @@ class GrapheMATest {
 		assertEquals(2, g.dIn(5));
 		assertEquals(0, g.dIn(6));
 		assertTrue(g.toString().contentEquals(
-		"0 1 1 1 1 0 \n"+
-		"0 0 0 0 1 0 \n"+
-		"0 0 0 0 0 0 \n"+
-		"0 0 0 1 0 0 \n"+
-		"1 0 0 0 0 0 \n"+
-		"0 0 0 0 0 0 \n"));
+				 "1 -> 2 3 4 5 \n"
+				+ "2 -> 5 \n"
+				+ "3 -> \n"
+				+ "4 -> 4 \n"
+				+ "5 -> 1 \n"
+				+ "6 -> \n"
+				));
+
 	}
 }
