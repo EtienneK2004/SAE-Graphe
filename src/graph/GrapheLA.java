@@ -12,7 +12,7 @@ public class GrapheLA {
 	}
 	
 	public int getNbNoeuds() {
-		return nbNoeuds+1-1;
+		return nbNoeuds;
 	}
 	
 	public void ajouterArc(int entrant, int sortant) {
