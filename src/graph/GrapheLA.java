@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 public class GrapheLA {
     private final ArrayList<Integer>[] listeAdj;
-    private int nbNoeuds;
 
     public GrapheLA(int nbNoeuds) {
-        this.nbNoeuds = nbNoeuds;
         this.listeAdj = new ArrayList[nbNoeuds];
 
         for (int i = 0; i < nbNoeuds; i++) {
@@ -18,11 +16,11 @@ public class GrapheLA {
     /**
      * Vérifie si le noeud est dans le graphe
      *
-     * @param arc Arc à vérifier
+     * @param noeud Noeud à vérifier
      * @return true si le noeud est dans le graphe, false sinon
      */
-    private boolean checkArc(int arc) {
-        return arc - 1 < this.nbNoeuds && arc - 1 >= 0;
+    private boolean checkNoeud(int noeud) {
+    	return noeud - 1 < getNbNoeuds() && noeud - 1 >= 0;
     }
 
     /**
@@ -31,7 +29,7 @@ public class GrapheLA {
      * @return nombre de noeuds du graphe
      */
     public int getNbNoeuds() {
-        return nbNoeuds;
+        return listeAdj.length;
     }
 
     /**
@@ -41,7 +39,7 @@ public class GrapheLA {
      * @param sortant Noeud de sortie
      */
     public void ajouterArc(int entrant, int sortant) {
-        if (!(checkArc(entrant) && checkArc(sortant))) return;
+        if (!(checkNoeud(entrant) && checkNoeud(sortant))) return;
 
         this.listeAdj[entrant - 1].add(sortant);
     }
@@ -54,7 +52,7 @@ public class GrapheLA {
      * @return true si l'arc entre deux noeuds est présent dans le graphe, false sinon
      */
     public boolean aArc(int entrant, int sortant) {
-        if (!(checkArc(entrant) && checkArc(sortant))) return false;
+        if (!(checkNoeud(entrant) && checkNoeud(sortant))) return false;
 
         return this.listeAdj[entrant - 1].contains(sortant);
     }
@@ -66,7 +64,7 @@ public class GrapheLA {
      * @return Nombre de successeurs d'un noeud
      */
     public int dOut(int entrant) {
-        if (!checkArc(entrant)) return 0;
+        if (!checkNoeud(entrant)) return 0;
 
         return this.listeAdj[entrant - 1].size();
     }
@@ -78,10 +76,10 @@ public class GrapheLA {
      * @return Nombre de prédécesseurs d'un noeud
      */
     public int dIn(int sortant) {
-        if (!checkArc(sortant)) return 0;
+        if (!checkNoeud(sortant)) return 0;
 
         int nbArcs = 0;
-        for (int i = 0; i < this.nbNoeuds; i++) {
+        for (int i = 0; i < getNbNoeuds(); i++) {
             if (this.listeAdj[i].contains(sortant)) {
                 nbArcs++;
             }
@@ -99,7 +97,7 @@ public class GrapheLA {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < this.nbNoeuds; i++) {
+        for (int i = 0; i < getNbNoeuds(); i++) {
             sb.append(i + 1).append(" -> ");
             for (int value : this.listeAdj[i]) {
                 sb.append(value).append(" ");
