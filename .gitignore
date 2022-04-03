@@ -1,1 +1,8 @@
 /bin/
+
+.idea/
+.classpath
+.project
+sae-graph.iml
+
+classes/
