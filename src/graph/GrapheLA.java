@@ -9,6 +9,9 @@ public class GrapheLA {
 	public GrapheLA(int nbNoeuds) {
 		this.nbNoeuds = nbNoeuds;
 		listeAdj = new ArrayList<>();
+		for(int i = 0; i<nbNoeuds; i++) 
+			listeAdj.add(0);
+		
 	}
 	
 	public int getNbNoeuds() {
@@ -32,6 +35,20 @@ public class GrapheLA {
 	
 	@Override
 	public String toString() {
-		return super.toString();
+		StringBuilder sb = new StringBuilder();
+		int indice = 0;
+		int nbSucc;
+		for(int noeud = 1; noeud<=getNbNoeuds(); noeud++) {
+			nbSucc = listeAdj.get(indice);
+			sb.append(noeud + " -> ");
+			for(int succ = 0; succ<nbSucc; succ++) {
+				indice++;
+				sb.append(listeAdj.get(indice) + " ");
+			}
+			sb.append("\n");
+			indice++;
+			
+		}
+		return sb.toString();
 	}
 }

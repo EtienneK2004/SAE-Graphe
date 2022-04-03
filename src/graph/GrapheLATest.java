@@ -8,7 +8,7 @@ class GrapheLATest {
 	private final static int NB_NOEUDS = 6;
 	@Test
 	void test() {
-		GrapheMA g = new GrapheMA(NB_NOEUDS);
+		GrapheLA g = new GrapheLA(NB_NOEUDS);
 		assertEquals(NB_NOEUDS, g.getNbNoeuds());
 		g.ajouterArc(1,2);
 		g.ajouterArc(1,3);
