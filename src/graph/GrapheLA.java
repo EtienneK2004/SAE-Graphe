@@ -1,111 +1,104 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GrapheLA {
-    private final ArrayList<Integer>[] listeAdj;
 
-    public GrapheLA(int nbNoeuds) {
-        this.listeAdj = new ArrayList[nbNoeuds];
+public class GrapheLA implements IGraph {
+	private Map<String, Integer> noeuds;
+	private ArrayList<ArrayList<Arc>> la;
+	
+	private static class Arc  {
+		String cible;
+		int valeur;
+		Arc(String cible, int valeur) {
+			this.cible = cible;
+			this.valeur = valeur;
+		}
+		@Override
+		public boolean equals(Object ob) {
+			if (this == ob)
+				return true;
+			if (ob.getClass() != Arc.class)
+				return false;
+			Arc a = (Arc) ob;
+			return a.cible.equals(this.cible); // on ne tient PAS compte de la valeur
+			// afin de faciliter l'ecriture de la methode aArc
+			// qui cherche si un arc avec la meme cible existe peu importe la valeur
+			// en utilisant contains sur une liste d'arcs or contains appelle
+			// cette methode equals
+		}
+	}
 
-        for (int i = 0; i < nbNoeuds; i++) {
-            this.listeAdj[i] = new ArrayList<>();
-        }
-    }
+	public GrapheLA(String[] labels) {
+		this.noeuds = new HashMap<>();
+		int nb = labels.length;
+		for (int i =0; i< nb; ++i)
+			this.noeuds.put(labels[i], i);
+		la = new ArrayList<>();
+		for (int i = 0; i < nb; ++i)
+			la.add(new ArrayList<>());
+	}
+	@Override
+	public int getNbNoeuds() {
+		return la.size();
+	}
+	@Override
+	public boolean estNoeudOK(String label) {
+		return noeuds.containsKey(label);
+	}
+	@Override
+	public boolean estArcOK(String n1, String n2) {
+		return estNoeudOK(n1) && estNoeudOK(n2);
+	}
+	@Override
+	public void ajouterArc(String label1, String label2, int valeur) {
+		assert ! aArc(label1,label2);
+		int n1 = noeuds.get(label1);
+		la.get(n1).add(new Arc(label2, valeur));
+	}
+	@Override
+	public boolean aArc(String label1, String label2) {
+		assert estArcOK(label1,label2);
+		int n1 = noeuds.get(label1);
+		return la.get(n1).contains(new Arc(label2, 0));
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		for(String label1 : noeuds.keySet()) {
+			s+= label1 + " -> ";
+			for (Arc a : la.get(noeuds.get(label1)))
+				s+= a.cible + "("+ a.valeur + ") ";
+			s+="\n";
+		}
+		return s;
+	}
+	@Override
+	public int dOut(String label) {
+		assert estNoeudOK(label);
+		return la.get(noeuds.get(label)).size();
+	}
+	@Override
+	public int dIn(String label) {
+		assert estNoeudOK(label);
+		int d = 0;
+		Arc a = new Arc(label, 0);
+		for(int i = 0; i< la.size(); ++i)
+			if (la.get(i).contains(a))
+				++d;
+		return d;
+	}
 
-    /**
-     * Vérifie si le noeud est dans le graphe
-     *
-     * @param noeud Noeud à vérifier
-     * @return true si le noeud est dans le graphe, false sinon
-     */
-    private boolean checkNoeud(int noeud) {
-    	return noeud - 1 < getNbNoeuds() && noeud - 1 >= 0;
-    }
-
-    /**
-     * Retourne le nombre de noeuds du graphe
-     *
-     * @return nombre de noeuds du graphe
-     */
-    public int getNbNoeuds() {
-        return listeAdj.length;
-    }
-
-    /**
-     * Ajoute un arc entre deux noeuds
-     *
-     * @param entrant Noeud d'entrée
-     * @param sortant Noeud de sortie
-     */
-    public void ajouterArc(int entrant, int sortant) {
-        if (!(checkNoeud(entrant) && checkNoeud(sortant))) return;
-
-        this.listeAdj[entrant - 1].add(sortant);
-    }
-
-    /**
-     * Retourne si l'arc entre deux noeuds est présent dans le graphe
-     *
-     * @param entrant Noeud d'entrée
-     * @param sortant Noeud de sortie
-     * @return true si l'arc entre deux noeuds est présent dans le graphe, false sinon
-     */
-    public boolean aArc(int entrant, int sortant) {
-        if (!(checkNoeud(entrant) && checkNoeud(sortant))) return false;
-
-        return this.listeAdj[entrant - 1].contains(sortant);
-    }
-
-    /**
-     * Retourne le nombre de successeurs d'un noeud
-     *
-     * @param entrant Noeud d'entrée
-     * @return Nombre de successeurs d'un noeud
-     */
-    public int dOut(int entrant) {
-        if (!checkNoeud(entrant)) return 0;
-
-        return this.listeAdj[entrant - 1].size();
-    }
-
-    /**
-     * Retourne le nombre de prédécesseurs d'un noeud
-     *
-     * @param sortant Noeud de sortie
-     * @return Nombre de prédécesseurs d'un noeud
-     */
-    public int dIn(int sortant) {
-        if (!checkNoeud(sortant)) return 0;
-
-        int nbArcs = 0;
-        for (int i = 0; i < getNbNoeuds(); i++) {
-            if (this.listeAdj[i].contains(sortant)) {
-                nbArcs++;
-            }
-        }
-
-        return nbArcs;
-    }
-
-    /**
-     * Retourne la liste d'adjacence du graphe sous chaine de caractères
-     *
-     * @return Liste d'adjacence du graphe
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < getNbNoeuds(); i++) {
-            sb.append(i + 1).append(" -> ");
-            for (int value : this.listeAdj[i]) {
-                sb.append(value).append(" ");
-            }
-            sb.append("\n");
-        }
-
-        return sb.toString();
-    }
+	@Override
+	public int getValeur(String n1, String n2) {
+		assert aArc(n1, n2);
+		for (Arc a : la.get(noeuds.get(n1)))
+			if (a.cible.equals(n2))
+				return a.valeur;
+		throw new RuntimeException("Pas de valeur trouvée pour l'arc " + n1 +" -> " +n2);
+	}
 
 }
