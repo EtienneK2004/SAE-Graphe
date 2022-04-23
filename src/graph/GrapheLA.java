@@ -8,6 +8,7 @@ import java.util.Map;
 public class GrapheLA implements IGraph {
 	private Map<String, Integer> noeuds;
 	private ArrayList<ArrayList<Arc>> la;
+	private String[] labels;
 	
 	private static class Arc  {
 		String cible;
@@ -32,6 +33,7 @@ public class GrapheLA implements IGraph {
 	}
 
 	public GrapheLA(String[] labels) {
+		this.labels = labels;
 		this.noeuds = new HashMap<>();
 		int nb = labels.length;
 		for (int i =0; i< nb; ++i)
@@ -99,6 +101,37 @@ public class GrapheLA implements IGraph {
 			if (a.cible.equals(n2))
 				return a.valeur;
 		throw new RuntimeException("Pas de valeur trouvée pour l'arc " + n1 +" -> " +n2);
+	}
+	@Override
+	public String[] getLabels() {
+		return labels;
+	}
+	@Override
+	public String[] getSucc(String predecesseur) {
+		assert estNoeudOK(predecesseur);
+		assert dOut(predecesseur) != 0;
+		int cmp = 0;
+		String[] tab = new String[la.get(noeuds.get(predecesseur)).size()];
+		for(Arc a: la.get(noeuds.get(predecesseur))) {
+			tab[cmp] = a.cible;
+			++cmp;
+		}
+		return tab;
+	}
+	@Override
+	public String[] getPred(String successeur) {
+		assert estNoeudOK(successeur);
+		assert dIn(successeur) != 0;
+		int cmp = 0;
+		String[] tab = new String[dIn(successeur)];
+		Arc a = new Arc(successeur, 0);
+		for(int i = 0; i < la.size(); ++i) {
+			if (la.get(i).contains(a)) {
+				tab[cmp] = a.cible;
+				++cmp;
+			}
+		}		
+		return tab;
 	}
 
 }
