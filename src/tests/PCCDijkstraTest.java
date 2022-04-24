@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 //import graph.GrapheLA;
 import graph.GrapheMA;
 import graph.PCCDijkstra;
-import graph.Toto;
 
 class PCCDijkstraTest {
 
@@ -17,7 +16,7 @@ class PCCDijkstraTest {
 	private final static String[] NOEUDS3 = {"A", "B", "C", "D", "E", "F"};
 	
 	
-	// Rajouter un boolean dans les classe de graphe dès qu'il y a une pondération négative
+	// Rajouter un boolean dans les classe de graphe dès qu'il y a une pondération négative la fonction estOK
 	
 	@Test
 	void test() {
@@ -32,8 +31,7 @@ class PCCDijkstraTest {
 		g.ajouterArc("C","D", 1);
 		g.ajouterArc("D","E", 2);
 		g.ajouterArc("F","E", 2);
-		//PCCDijkstra.test(g, "A", "E");
-		Toto toto = new Toto(g);
+		PCCDijkstra toto = new PCCDijkstra(g);
 		toto.test("A", "D");
 
 		GrapheMA g1 = new GrapheMA(NOEUDS2);
@@ -42,8 +40,7 @@ class PCCDijkstraTest {
 		g1.ajouterArc("C","B", 1);
 		g1.ajouterArc("B","A", 1);
 		g1.ajouterArc("A","D", 2);
-		//PCCDijkstra.test(g1, "1", "4");
-		Toto toto1 = new Toto(g1);
+		PCCDijkstra toto1 = new PCCDijkstra(g1);
 		toto1.test("A", "D");
 		
 		GrapheMA g3 = new GrapheMA(NOEUDS3);
@@ -52,9 +49,7 @@ class PCCDijkstraTest {
 		g3.ajouterArc("B","D", 3);
 		g3.ajouterArc("D","E", 5);
 		g3.ajouterArc("C","E", 4);
-		Toto toto3 = new Toto(g3);
+		PCCDijkstra toto3 = new PCCDijkstra(g3);
 		toto3.test("A", "D");
-		
-		
 	}
 }

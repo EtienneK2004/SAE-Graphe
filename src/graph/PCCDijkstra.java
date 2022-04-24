@@ -1,141 +1,155 @@
 package graph;
 
-
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PCCDijkstra {
-
-	// getPred cassé pour grahLA
-	// faire un if pour les noeuds qui ont une valeur != inf et prendre le plus petit comme prochain noeud
-	// mettre dans noeud visite le plus petit de ceux là
 	
-	private static ArrayList<String> noeud_visites = new ArrayList<>();
-	private static int[] distance_min;
-	private static final int inf = Integer.MAX_VALUE;
 	
-	private static String pourUnNoeud(IGraph g, String noeud_courant) {
-		String min = g.getSucc(noeud_courant)[0];
-		for(String s : g.getSucc(noeud_courant)) {
-			if(distance_min[getPlace(s, g)] < g.getValeur(noeud_courant, s))
-				distance_min[getPlace(s, g)] = distance_min[getPlace(noeud_courant, g)] + g.getValeur(noeud_courant, s);
-			if(distance_min[getPlace(s, g)] < distance_min[getPlace(min, g)])
-				if(isPossible(min))
-					min = s;
-		}
-		if(isPossible(min))
-			return min;
-		return null;
-	}
-	
-	private static boolean isPossible(String min) {
-		for(String s : noeud_visites)
-			if(min.compareTo(s) == 0)
-				return false;
-		return true;	
-	}
-
-	public static void test(IGraph g, String premier, String dernier) {
-		distance_min = new int[g.getNbNoeuds()];
-		for(int i = 0; i < distance_min.length; i++)
-			distance_min[i] = inf;
-		distance_min[getPlace(premier, g)] = 0;
-		noeud_visites.add(premier);
-		for(int i = 0; i < distance_min.length; ++i)
-			System.out.println(g.getLabels()[i] + " " + distance_min[i]);
-		while(!passe_partout(g)) {
-			for(int i = 0; i < distance_min.length; ++i)
-				System.out.println(g.getLabels()[i] + " " + distance_min[i]);
-			noeud_visites.add(pourUnNoeud(g, noeud_visites.get(noeud_visites.size()-1)));
+	private class Node {
+		public String name;
+		public Node previous_node;
+		public int total_value;
+		public boolean closed;
+		 
+		public Node(String name) {
+			this.name = name;
+			this.total_value = Integer.MAX_VALUE;
+			this.previous_node = null;
+			this.closed = false;
 		}
 	}
 	
-	private static int getPlace(String noeud, IGraph g) {
-		for(int i = 0; i < g.getLabels().length;++i)
-			if(noeud.compareTo(g.getLabels()[i]) == 0)
-				return i;
-		return -1;
+	
+	private Map<String, Node> nodes;	
+	IGraph graph = null;
+	
+	/**
+	 * Cree l'objet PCCDijkstra qui pourra etre utilise pour n'importe quel noeud d'un meme graphe.
+	 * @param graph , graphe que l'on veut etudier.
+	 */
+	public PCCDijkstra(IGraph graph) {
+		this.graph = graph;
+		this.nodes = new HashMap<>();
 	}
-
-	private static boolean passe_partout(IGraph g) {
-		for(String s : g.getLabels()) {
-			boolean trouvee = false;
-			for(String s2 : noeud_visites)
-				if(s.compareTo(s2) == 0)
-					trouvee = true;
-			if(!trouvee)
-				return false;
+	
+	/**
+	 *  C'est la fonction recursive  qui compose l'algorithme.
+	 * 
+	 * @param current_node , noeud qui va etre etuidie. Pour le premier appel, il faut mettre le noeud de depart.
+	 */
+	public void Dijkstra(Node current_node) {
+		//System.out.println("Current:" + current_node.name);
+		current_node.closed = true;
+		
+		int minimum_value = Integer.MAX_VALUE;
+		Node minimum_node = null;
+		
+		if(graph.dOut(current_node.name) == 0) {
+			for(Map.Entry<String, Node> key_value : nodes.entrySet()) {
+				Node node = key_value.getValue();
+				if((node.total_value < minimum_value) && (!node.closed)){
+					minimum_value = node.total_value;
+					minimum_node = node;
+				}
+			}
+			
+			if(minimum_node != null) {
+				Dijkstra(minimum_node);
+			}
+			
+			return;
 		}
-		return true;
+		
+		for(String name : graph.getSucc(current_node.name)) {
+
+			Node node = nodes.get(name);
+			
+			int arc_value = graph.getValeur(current_node.name, name);
+			
+			int value_test = current_node.total_value + arc_value;
+			
+			if(value_test < node.total_value) {
+				node.total_value = value_test;
+				node.previous_node = current_node;
+			}
+			
+			
+			if(node.total_value < minimum_value) {
+				minimum_value = node.total_value;
+				minimum_node = node;
+			}
+		}
+
+		
+		for(Map.Entry<String, Node> key_value : nodes.entrySet()) {
+			Node node = key_value.getValue();
+			if((node.total_value < minimum_node.total_value) && (!node.closed))	{
+				minimum_node = node;
+			}
+		}
+
+		DisplayNodes();
+		
+		if(!minimum_node.closed) {
+			Dijkstra(minimum_node);
+		}
 	}
+	
+	/**
+	 * Affiche le resultat de l'algorithme.
+	 */
+	public void DisplayNodes() {
+		for(String name : graph.getLabels()) {
+			Node node = nodes.get(name);
+			// (node.closed ? "closed" : "opened")  c'est pour savoir si il est déjà allé dessus
+			System.out.print("[" + node.name + "] -> " + (node.total_value == Integer.MAX_VALUE ? "I" : node.total_value) + 
+					"("+ (node.previous_node != null ? node.previous_node.name : " ") + ") ");
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * Effectue l'agorithme de Dijkstra en prennant des entiers.
+	 * 
+	 * @param begin_node , noeud de depart pour faire l'algorithme.
+	 * @param end_node , noeud d'arrivee.
+	 */
+	public void test(Integer begin_node, Integer end_node) {
+		test(begin_node.toString(), end_node.toString());
+	}
+	
+	/**
+	 * Effectue l'agorithme de Dijkstra en prennant des String.
+	 * 
+	 * @param begin_node , noeud de depart pour faire l'algorithme.
+	 * @param end_node , noeud d'arrivee.
+	 */
+	public void test(String begin_node, String end_node) {
+		System.out.println("Debut de l'algorithme de Dijkstra.");
+		nodes.clear();
+		
+		for(String name : graph.getLabels()) {
+			nodes.put(name, new Node(name));
+		}
+		
+		Node node = nodes.get(begin_node);
+		node.total_value = 0;
+		
+		Dijkstra(node);
+		
+		String path = "";
+
+		Node loop_node = nodes.get(end_node);
+		boolean bFirst = true;
+		while(loop_node != null) {
+			path = loop_node.name + (bFirst ? "" : "-") + path;
+			loop_node = loop_node.previous_node;
+			bFirst = false;
+		}
+		
+		System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
+		System.out.println();
+	}
+		
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*noeud_visites.add(premier);
-distance_min = new int[g.getNbNoeuds()];
-String predescesseur[] = new String[g.getNbNoeuds()];
-for(int i = 0; i < distance_min.length; i++)
-	distance_min[i] = inf;
-for(int i : distance_min)
-	System.out.println(i);
-distance_min[getPlace(premier, g)] = 0;
-String noeud_Courant = null;
-while(!passe_partout(g)) {
-	noeud_Courant = getNoeudMin(g, noeud_visites.get(noeud_visites.size()-1));
-	noeud_visites.add(noeud_Courant);
-	if(noeud_Courant.compareTo(dernier) == 0)
-		break;
-	for(String successeur : g.getSucc(noeud_Courant)) {
-		if(noeud_Courant.compareTo("1") == 0)
-			System.out.println(successeur);
-		int distance = distance_min[getPlace(noeud_Courant, g)] + g.getValeur(noeud_Courant, successeur);
-		if(distance < distance_min[getPlace(successeur, g)]) {
-			distance_min[getPlace(successeur, g)] = distance;
-			predescesseur[getPlace(successeur, g)] = noeud_Courant;
-			System.out.println("test");
-		}
-	}
-}
-for(String s:noeud_visites)
-	System.out.println("n visite " + s);
-for(int i : distance_min)
-	System.out.println("dist min " +i);
-ArrayList<String> chemin = new ArrayList<>();
-if(g.dIn(dernier) != 0) {
-	noeud_Courant = dernier;
-	chemin.add(dernier);
-	System.out.println(dernier + " " + g.dIn(noeud_Courant));
-	while(g.dIn(noeud_Courant) > 0) {
-		chemin.add(0, noeud_Courant);
-		System.out.println(getPlace(noeud_Courant, g));
-		noeud_Courant = predescesseur[getPlace(noeud_Courant, g)];
-		System.out.println(noeud_Courant);
-		for(String s:predescesseur)
-			System.out.println("predecesseur " +s);
-	}
-}
-for(String s : chemin)
-	System.out.println(s + ", ");
-System.out.println(distance_min[getPlace(noeud_Courant, g)]);
-*/
