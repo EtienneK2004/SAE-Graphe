@@ -118,20 +118,5 @@ public class GrapheLA implements IGraph {
 		}
 		return tab;
 	}
-	@Override
-	public String[] getPred(String successeur) {
-		assert estNoeudOK(successeur);
-		assert dIn(successeur) != 0;
-		int cmp = 0;
-		String[] tab = new String[dIn(successeur)];
-		Arc a = new Arc(successeur, 0);
-		for(int i = 0; i < la.size(); ++i) {
-			if (la.get(i).contains(a)) {
-				tab[cmp] = a.cible;
-				++cmp;
-			}
-		}		
-		return tab;
-	}
 
 }

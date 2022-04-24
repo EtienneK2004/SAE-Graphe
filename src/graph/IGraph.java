@@ -3,14 +3,6 @@ package graph;
 public interface IGraph {
 	
 	/**
-	 * Retourne le tableau des predecesseurs
-	 * 
-	 * @param successeur
-	 * @return tab predecesseurs
-	 */
-	String[] getPred(String successeur);
-	
-	/**
 	 * Retourne le tableau des successeurs
 	 * 
 	 * @param predecesseur

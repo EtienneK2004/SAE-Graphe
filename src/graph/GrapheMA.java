@@ -18,6 +18,7 @@ public class GrapheMA implements IGraph {
 		mab = new boolean[nb][nb]; 
 		mav = new int[nb][nb];
 	}
+	
 	@Override
 	public int getNbNoeuds() { return mab.length; }
 	@Override
@@ -95,21 +96,6 @@ public class GrapheMA implements IGraph {
 		for (int n2 = 0; n2 < getNbNoeuds(); ++n2) {
 			if (mab[n1][n2]) {
 				tab[cmp] = labels[n2];
-				++cmp;
-			}
-		}
-		return tab;
-	}
-	@Override
-	public String[] getPred(String successeur) {
-		assert estNoeudOK(successeur);
-		assert dIn(successeur) != 0;
-		int cmp = 0;
-		String[] tab = new String[dIn(successeur)];
-		int n2 = noeuds.get(successeur);
-		for (int n1 = 0; n1 < getNbNoeuds(); ++n1) {
-			if (mab[n1][n2]) {
-				tab[cmp] = labels[n1];
 				++cmp;
 			}
 		}
