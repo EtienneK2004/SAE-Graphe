@@ -175,7 +175,7 @@ public class PCCDijkstra implements IPCC{
 			path.add(pathFinal.get(i));
 		
 		
-		return distance(entrant, sortant);
+		return graph.distance(path);
 	}
 		
 }

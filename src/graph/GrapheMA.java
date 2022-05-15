@@ -109,7 +109,7 @@ public class GrapheMA implements IGraph {
 	public int distance(ArrayList<String> cheminCalcule) {
 		int value = 0;
 		for(int i = 0; i < cheminCalcule.size() - 1; ++i) {
-			value = getValeur(cheminCalcule.get(i), cheminCalcule.get(i + 1));
+			value += getValeur(cheminCalcule.get(i), cheminCalcule.get(i + 1));
 		}
 		return value;
 	}

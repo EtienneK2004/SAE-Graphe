@@ -15,6 +15,11 @@ public class PCCBellman implements IPCC{
 	private String[] p;    //Prédécesseur optimal pour chaque point
 	private boolean tri = false;
 	private boolean calcule = false;
+	
+	
+	
+	
+	
 	public PCCBellman(IGraph graph) {
 		this.graph = graph;
 		labelsTriNiveau = new String[graph.getNbNoeuds()];
@@ -111,10 +116,15 @@ public class PCCBellman implements IPCC{
 		}
 		int idxM;
 		for(int i = 1; i < n; i++) {
+			
 			idxM = indexOfMinDistance(labelsTriNiveau[i]);
-			d[i] = graph.getValeur(labelsTriNiveau[idxM], labelsTriNiveau[i]) + d[idxM];
-			p[i] = labelsTriNiveau[idxM];
+			if(idxM != -1) {
+				
+				d[i] = graph.getValeur(labelsTriNiveau[idxM], labelsTriNiveau[i]) + d[idxM];
+				p[i] = labelsTriNiveau[idxM];
+			}
 		}
+		
 		
 		calcule = true;
 		
@@ -127,12 +137,11 @@ public class PCCBellman implements IPCC{
 		if(!calcule) algorithme(debut, fin);
 
 		String nCourant = fin;
-		while(nCourant != debut) {
+		while(nCourant != null) {
 			path.add(nCourant);
 			nCourant = p[Arrays.asList(labelsTriNiveau).indexOf(nCourant)];
 			
 		}
-		path.add(debut);
 		
 		ArrayList<String> pathFinal = new ArrayList<String>();
 		for(int i = path.size() - 1; i >= 0; --i)
@@ -140,8 +149,7 @@ public class PCCBellman implements IPCC{
 		path.clear();
 		for(int i = 0; i < pathFinal.size(); i++)
 			path.add(pathFinal.get(i));
-		
-		return distance(debut, fin);
+		return graph.distance(path);
 	}
 	
 	

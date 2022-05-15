@@ -35,17 +35,7 @@ class PlusCourtTest {
 		listeFichiers.add("g-100-4.txt");
 		listeFichiers.add("g-100-5.txt");
 		
-		listeFichiers.add("g-1000-1.txt");
-		listeFichiers.add("g-1000-2.txt");
 		
-		listeFichiers.add("g-10000-1.txt");
-		listeFichiers.add("g-10000-2.txt");
-		
-		listeFichiers.add("g-100000-1.txt");
-		listeFichiers.add("g-100000-2.txt");
-		
-		listeFichiers.add("g-1000000-1.txt");
-		listeFichiers.add("g-1000000-2.txt");
 	}
 	
 	@Test
