@@ -1,9 +1,12 @@
-package graph;
+package pcc;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
-public class PCCDijkstra {
+import graph.IGraph;
+
+public class PCCDijkstra implements IPCC{
 	
 	
 	private class Node {
@@ -23,6 +26,7 @@ public class PCCDijkstra {
 	
 	private Map<String, Node> nodes;	
 	IGraph graph = null;
+	private boolean calcule = false;
 	
 	/**
 	 * Cree l'objet PCCDijkstra qui pourra etre utilise pour n'importe quel noeud d'un meme graphe.
@@ -139,22 +143,26 @@ public class PCCDijkstra {
 		Dijkstra(node);		
 		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
 		//System.out.println();
+		calcule = true;
 	}
 	
-	public String getPath(String end_node) {
-		String path = "";
+	public String[] chemin(String entrant, String end_node) {
+		if(!calcule) algo(entrant, end_node);
+		LinkedList<String> path = new LinkedList<>();
 
 		Node loop_node = nodes.get(end_node);
-		boolean bFirst = true;
 		while(loop_node != null) {
-			path = loop_node.name + (bFirst ? "" : "-") + path;
+			path.push(loop_node.name);
 			loop_node = loop_node.previous_node;
-			bFirst = false;
 		}
-		return path;
+		
+		
+		
+		return path.toArray(new String[path.size()]);
 	}
 	
-	public int getTotalValue(String end_node) {
+	public int distance(String entrant, String end_node) {
+		if(!calcule) algo(entrant, end_node);
 		Node node = nodes.get(end_node);
 		return node.total_value;
 	}

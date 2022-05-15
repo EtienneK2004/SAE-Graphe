@@ -89,7 +89,7 @@ public class GrapheMA implements IGraph {
 	@Override
 	public String[] getSucc(String predecesseur) {
 		assert estNoeudOK(predecesseur);
-		assert dOut(predecesseur) != 0;
+		if(dOut(predecesseur) == 0) return new String[0];
 		int cmp = 0;
 		String[] tab = new String[dOut(predecesseur)];
 		int n1 = noeuds.get(predecesseur);
