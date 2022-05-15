@@ -1,7 +1,7 @@
 package pcc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import graph.IGraph;
@@ -141,30 +141,41 @@ public class PCCDijkstra implements IPCC{
 		node.total_value = 0;
 		
 		Dijkstra(node);		
+		
 		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
 		//System.out.println();
 		calcule = true;
 	}
-	
-	public String[] chemin(String entrant, String end_node) {
-		if(!calcule) algo(entrant, end_node);
-		LinkedList<String> path = new LinkedList<>();
 
-		Node loop_node = nodes.get(end_node);
+	@Override
+	public int distance(String entrant, String sortant) {
+		algo(entrant, sortant);
+		if(!calcule) algo(entrant, sortant);
+		Node node = nodes.get(sortant);
+		return node.total_value;
+	}
+
+	@Override
+	public int chemin(String entrant, String sortant, ArrayList<String> path) {
+		algo(entrant, sortant);
+		if(!calcule) algo(entrant, sortant);
+		
+		
+		Node loop_node = nodes.get(sortant);
 		while(loop_node != null) {
-			path.push(loop_node.name);
+			path.add(loop_node.name);
 			loop_node = loop_node.previous_node;
 		}
 		
+		ArrayList<String> pathFinal = new ArrayList<String>();
+		for(int i = path.size() - 1; i >= 0; --i)
+			pathFinal.add(path.get(i));
+		path.clear();
+		for(int i = 0; i < pathFinal.size(); i++)
+			path.add(pathFinal.get(i));
 		
 		
-		return path.toArray(new String[path.size()]);
-	}
-	
-	public int distance(String entrant, String end_node) {
-		if(!calcule) algo(entrant, end_node);
-		Node node = nodes.get(end_node);
-		return node.total_value;
+		return distance(entrant, sortant);
 	}
 		
 }

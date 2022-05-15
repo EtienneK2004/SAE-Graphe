@@ -42,6 +42,7 @@ public class GrapheLA implements IGraph {
 		for (int i = 0; i < nb; ++i)
 			la.add(new ArrayList<>());
 	}
+	
 	@Override
 	public int getNbNoeuds() {
 		return la.size();
@@ -54,6 +55,7 @@ public class GrapheLA implements IGraph {
 	public boolean estArcOK(String n1, String n2) {
 		return estNoeudOK(n1) && estNoeudOK(n2);
 	}
+	
 	@Override
 	public void ajouterArc(String label1, String label2, int valeur) {
 		assert ! aArc(label1,label2);
@@ -117,6 +119,15 @@ public class GrapheLA implements IGraph {
 			++cmp;
 		}
 		return tab;
+	}
+
+	@Override
+	public int distance(ArrayList<String> cheminCalcule) {
+		int value = 0;
+		for(int i = 0; i < cheminCalcule.size() - 1; ++i) {
+			value = getValeur(cheminCalcule.get(i), cheminCalcule.get(i + 1));
+		}
+		return value;
 	}
 
 }

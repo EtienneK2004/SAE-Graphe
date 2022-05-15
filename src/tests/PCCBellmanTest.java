@@ -2,14 +2,29 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import graph.GrapheMA;
+import pcc.IPCC;
 import pcc.PCCBellman;
 
 class PCCBellmanTest {
 	private final static String[] NOEUDS = {"A", "B", "C", "D", "E", "F"};
 	private final static String[] NOEUDS2 = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+	
+	private String[] toTab(String entrant, String sortant, IPCC pcc) {
+		ArrayList<String> path = new ArrayList<>();
+		pcc.chemin(entrant,sortant, path);
+		String[] res = new String[path.size()];
+		for(int i = 0; i < path.size(); ++i)
+			res[i] = path.get(i);
+		for(String s : res)
+			System.out.println(s);
+		return res;
+	}
+	
 	@Test
 	void testTriNiveau() {
 		GrapheMA g = new GrapheMA(NOEUDS);
@@ -47,7 +62,7 @@ class PCCBellmanTest {
 		g.ajouterArc("7", "6", 5);
 		PCCBellman blman = new PCCBellman(g);
 		String[] resAttendu = {"1", "5", "7", "6"};
-		assertArrayEquals(resAttendu, blman.chemin("1", "6"));
+		assertArrayEquals(resAttendu,toTab("1", "6", blman));
 			
 		
 		assertEquals(16, blman.distance("1", "6"));

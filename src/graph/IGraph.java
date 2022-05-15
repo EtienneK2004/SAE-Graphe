@@ -1,5 +1,7 @@
 package graph;
 
+import java.util.ArrayList;
+
 public interface IGraph {
 	
 	/**
@@ -81,5 +83,8 @@ public interface IGraph {
 	 * @return La ponderation
 	 */
 	int getValeur(String n1, String n2);
+
+	
+	int distance(ArrayList<String> cheminCalcule);
 
 }

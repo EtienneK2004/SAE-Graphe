@@ -1,5 +1,6 @@
 package pcc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -122,22 +123,25 @@ public class PCCBellman implements IPCC{
 	
 	//renvoie le plus court chemin entre 2 noeud
 	@Override
-	public String[] chemin(String debut, String fin) {
+	public int chemin(String debut, String fin, ArrayList<String> path) {
 		if(!calcule) algorithme(debut, fin);
 
-		
-		LinkedList<String> path = new LinkedList<>();
 		String nCourant = fin;
 		while(nCourant != debut) {
-			path.push(nCourant);
+			path.add(nCourant);
 			nCourant = p[Arrays.asList(labelsTriNiveau).indexOf(nCourant)];
 			
 		}
-		path.push(debut);
+		path.add(debut);
 		
+		ArrayList<String> pathFinal = new ArrayList<String>();
+		for(int i = path.size() - 1; i >= 0; --i)
+			pathFinal.add(path.get(i));
+		path.clear();
+		for(int i = 0; i < pathFinal.size(); i++)
+			path.add(pathFinal.get(i));
 		
-		
-		return path.toArray(new String[path.size()]);
+		return distance(debut, fin);
 	}
 	
 	
