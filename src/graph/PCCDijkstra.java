@@ -89,7 +89,7 @@ public class PCCDijkstra {
 			}
 		}
 
-		DisplayNodes();
+		//DisplayNodes();
 		
 		if(!minimum_node.closed) {
 			Dijkstra(minimum_node);
@@ -99,7 +99,7 @@ public class PCCDijkstra {
 	/**
 	 * Affiche le resultat de l'algorithme.
 	 */
-	public void DisplayNodes() {
+	/*public void DisplayNodes() {
 		for(String name : graph.getLabels()) {
 			Node node = nodes.get(name);
 			// (node.closed ? "closed" : "opened")  c'est pour savoir si il est déjà allé dessus
@@ -107,7 +107,7 @@ public class PCCDijkstra {
 					"("+ (node.previous_node != null ? node.previous_node.name : " ") + ") ");
 		}
 		System.out.println();
-	}
+	}*/
 	
 	/**
 	 * Effectue l'agorithme de Dijkstra en prennant des entiers.
@@ -115,8 +115,8 @@ public class PCCDijkstra {
 	 * @param begin_node , noeud de depart pour faire l'algorithme.
 	 * @param end_node , noeud d'arrivee.
 	 */
-	public void test(Integer begin_node, Integer end_node) {
-		test(begin_node.toString(), end_node.toString());
+	public void algo(Integer begin_node, Integer end_node) {
+		algo(begin_node.toString(), end_node.toString());
 	}
 	
 	/**
@@ -125,8 +125,8 @@ public class PCCDijkstra {
 	 * @param begin_node , noeud de depart pour faire l'algorithme.
 	 * @param end_node , noeud d'arrivee.
 	 */
-	public void test(String begin_node, String end_node) {
-		System.out.println("Debut de l'algorithme de Dijkstra.");
+	public void algo(String begin_node, String end_node) {
+		//System.out.println("Debut de l'algorithme de Dijkstra.");
 		nodes.clear();
 		
 		for(String name : graph.getLabels()) {
@@ -136,8 +136,12 @@ public class PCCDijkstra {
 		Node node = nodes.get(begin_node);
 		node.total_value = 0;
 		
-		Dijkstra(node);
-		
+		Dijkstra(node);		
+		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
+		//System.out.println();
+	}
+	
+	public String getPath(String end_node) {
 		String path = "";
 
 		Node loop_node = nodes.get(end_node);
@@ -147,9 +151,12 @@ public class PCCDijkstra {
 			loop_node = loop_node.previous_node;
 			bFirst = false;
 		}
-		
-		System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
-		System.out.println();
+		return path;
+	}
+	
+	public int getTotalValue(String end_node) {
+		Node node = nodes.get(end_node);
+		return node.total_value;
 	}
 		
 }
