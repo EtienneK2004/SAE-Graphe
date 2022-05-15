@@ -32,7 +32,9 @@ class PCCDijkstraTest {
 		g.ajouterArc("D","E", 2);
 		g.ajouterArc("F","E", 2);
 		PCCDijkstra toto = new PCCDijkstra(g);
-		toto.test("A", "D");
+		toto.algo("A", "D");
+		assertEquals("A-B-C-D", toto.getPath("D"));
+		assertEquals(3, toto.getTotalValue("D"));
 
 		GrapheMA g1 = new GrapheMA(NOEUDS2);
 		assertEquals(NOEUDS2.length, g1.getNbNoeuds());
@@ -41,7 +43,9 @@ class PCCDijkstraTest {
 		g1.ajouterArc("B","A", 1);
 		g1.ajouterArc("A","D", 2);
 		PCCDijkstra toto1 = new PCCDijkstra(g1);
-		toto1.test("A", "D");
+		toto1.algo("A", "D");
+		assertEquals("A-D", toto1.getPath("D"));
+		assertEquals(2, toto1.getTotalValue("D"));
 		
 		GrapheMA g3 = new GrapheMA(NOEUDS3);
 		g3.ajouterArc("A","B", 1);
@@ -50,6 +54,8 @@ class PCCDijkstraTest {
 		g3.ajouterArc("D","E", 5);
 		g3.ajouterArc("C","E", 4);
 		PCCDijkstra toto3 = new PCCDijkstra(g3);
-		toto3.test("A", "D");
+		toto3.algo("A", "D");
+		assertEquals("A-B-D", toto3.getPath("D"));
+		assertEquals(4,toto3.getTotalValue("D"));
 	}
 }
