@@ -220,6 +220,10 @@ public class GrapheImporter {
     		throw new IllegalArgumentException("Pas de reponse dans "+ file);
 		}
 		line = sc.nextLine(); // nom de l'algo recommandé
+		if (! sc.hasNextLine()) {
+			sc.close();
+    		return Integer.MAX_VALUE;
+		}
 		line = sc.nextLine(); // distance attendue
 		int distance = Integer.parseInt(line.trim());
 		line = sc.nextLine(); // chemin

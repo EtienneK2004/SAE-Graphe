@@ -62,20 +62,23 @@ public class PCCBellman implements IPCC{
 			k++;
 		}
 		
-		
+		tri = true;
 		//On transforme la liste de listes en tableau à une dimension
 		
 		for(int i = 0; i<n; i++) {
 			if(noeudsTri.getFirst().size() == 0)
 				noeudsTri.pop();
-			labelsTriNiveau[i] = noeudsTri.getFirst().pop();
+			if(noeudsTri.size() > 0 && noeudsTri.getFirst().size() > 0)
+				labelsTriNiveau[i] = noeudsTri.getFirst().pop();
+			else
+				return;
 			
 		}
 		
 		
 		
 		
-		tri = true;
+		
 	}
 	
 	public String[] getTriNiveau() {
@@ -116,12 +119,13 @@ public class PCCBellman implements IPCC{
 		}
 		int idxM;
 		for(int i = 1; i < n; i++) {
-			
-			idxM = indexOfMinDistance(labelsTriNiveau[i]);
-			if(idxM != -1) {
-				
-				d[i] = graph.getValeur(labelsTriNiveau[idxM], labelsTriNiveau[i]) + d[idxM];
-				p[i] = labelsTriNiveau[idxM];
+			if(labelsTriNiveau[i] != null) {
+				idxM = indexOfMinDistance(labelsTriNiveau[i]);
+				if(idxM != -1) {
+					
+					d[i] = graph.getValeur(labelsTriNiveau[idxM], labelsTriNiveau[i]) + d[idxM];
+					p[i] = labelsTriNiveau[idxM];
+				}
 			}
 		}
 		
@@ -153,7 +157,7 @@ public class PCCBellman implements IPCC{
 	}
 	
 	
-	//renvoie la plus courte disctance entre 2 noeud
+	//renvoie la plus courte distance entre 2 noeud
 	@Override
 	public int distance(String debut, String fin) {
 		if(!calcule) algorithme(debut, fin);

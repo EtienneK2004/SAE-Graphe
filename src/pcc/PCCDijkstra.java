@@ -2,6 +2,8 @@ package pcc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import graph.IGraph;
@@ -13,13 +15,11 @@ public class PCCDijkstra implements IPCC{
 		public String name;
 		public Node previous_node;
 		public int total_value;
-		public boolean closed;
 		 
 		public Node(String name) {
 			this.name = name;
 			this.total_value = Integer.MAX_VALUE;
 			this.previous_node = null;
-			this.closed = false;
 		}
 	}
 	
@@ -42,61 +42,23 @@ public class PCCDijkstra implements IPCC{
 	 * 
 	 * @param current_node , noeud qui va etre etuidie. Pour le premier appel, il faut mettre le noeud de depart.
 	 */
-	public void Dijkstra(Node current_node) {
-		//System.out.println("Current:" + current_node.name);
-		current_node.closed = true;
-		
-		int minimum_value = Integer.MAX_VALUE;
-		Node minimum_node = null;
-		
-		if(graph.dOut(current_node.name) == 0) {
-			for(Map.Entry<String, Node> key_value : nodes.entrySet()) {
-				Node node = key_value.getValue();
-				if((node.total_value < minimum_value) && (!node.closed)){
-					minimum_value = node.total_value;
-					minimum_node = node;
-				}
+	public void Dijkstra() {
+		LinkedList<Node> Q = new LinkedList<>();
+		Node tmp = null;
+		for(String name : nodes.keySet())
+			Q.add(nodes.get(name));
+		boolean fin = false;
+		while(Q.size()>0 && !fin) {
+			tmp = Trouve_min(Q);
+			if(tmp == null) {
+				fin = true;
+				break;
 			}
+			Q.remove(tmp);
 			
-			if(minimum_node != null) {
-				Dijkstra(minimum_node);
+			for(String lab : graph.getSucc(tmp.name)) {
+				maj_distance(tmp.name, lab);
 			}
-			
-			return;
-		}
-		
-		for(String name : graph.getSucc(current_node.name)) {
-
-			Node node = nodes.get(name);
-			
-			int arc_value = graph.getValeur(current_node.name, name);
-			
-			int value_test = current_node.total_value + arc_value;
-			
-			if(value_test < node.total_value) {
-				node.total_value = value_test;
-				node.previous_node = current_node;
-			}
-			
-			
-			if(node.total_value < minimum_value) {
-				minimum_value = node.total_value;
-				minimum_node = node;
-			}
-		}
-
-		
-		for(Map.Entry<String, Node> key_value : nodes.entrySet()) {
-			Node node = key_value.getValue();
-			if((node.total_value < minimum_node.total_value) && (!node.closed))	{
-				minimum_node = node;
-			}
-		}
-
-		//DisplayNodes();
-		
-		if(!minimum_node.closed) {
-			Dijkstra(minimum_node);
 		}
 	}
 	
@@ -123,6 +85,27 @@ public class PCCDijkstra implements IPCC{
 		algo(begin_node.toString(), end_node.toString());
 	}
 	
+	
+	private Node Trouve_min(List<Node> Q) {
+		int dMin = Integer.MAX_VALUE;
+		Node res = null;
+		for(Node n : Q) {
+			if (n.total_value < dMin) {
+				dMin = n.total_value;
+				res = n;
+			}
+		}
+		return res;
+	}
+	
+	private void maj_distance(String s1, String s2) {
+	   if(nodes.get(s2).total_value > nodes.get(s1).total_value + graph.getValeur(s1, s2)) {
+		   nodes.get(s2).total_value = nodes.get(s1).total_value + graph.getValeur(s1, s2);
+		   nodes.get(s2).previous_node = nodes.get(s1);
+	   }
+	}
+	
+	
 	/**
 	 * Effectue l'agorithme de Dijkstra en prennant des String.
 	 * 
@@ -137,10 +120,14 @@ public class PCCDijkstra implements IPCC{
 			nodes.put(name, new Node(name));
 		}
 		
+		for(String lab : nodes.keySet()) {
+			nodes.get(lab).total_value = Integer.MAX_VALUE;
+		}
+		
 		Node node = nodes.get(begin_node);
 		node.total_value = 0;
 		
-		Dijkstra(node);		
+		Dijkstra();		
 		
 		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
 		//System.out.println();
@@ -150,7 +137,6 @@ public class PCCDijkstra implements IPCC{
 	@Override
 	public int distance(String entrant, String sortant) {
 		algo(entrant, sortant);
-		if(!calcule) algo(entrant, sortant);
 		Node node = nodes.get(sortant);
 		return node.total_value;
 	}
@@ -158,7 +144,6 @@ public class PCCDijkstra implements IPCC{
 	@Override
 	public int chemin(String entrant, String sortant, ArrayList<String> path) {
 		algo(entrant, sortant);
-		if(!calcule) algo(entrant, sortant);
 		
 		
 		Node loop_node = nodes.get(sortant);
@@ -171,6 +156,9 @@ public class PCCDijkstra implements IPCC{
 		for(int i = path.size() - 1; i >= 0; --i)
 			pathFinal.add(path.get(i));
 		path.clear();
+		if(!(pathFinal.get(0).equals(entrant) && pathFinal.get(pathFinal.size()-1).equals(sortant)) )
+			return Integer.MAX_VALUE;
+		
 		for(int i = 0; i < pathFinal.size(); i++)
 			path.add(pathFinal.get(i));
 		
