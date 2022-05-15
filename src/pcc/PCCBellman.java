@@ -1,10 +1,12 @@
-package graph;
+package pcc;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class PCCBellman {
+import graph.IGraph;
+
+public class PCCBellman implements IPCC{
 	private static final int INFINI = Integer.MAX_VALUE;
 	private IGraph graph;
 	private String[] labelsTriNiveau;
@@ -119,7 +121,8 @@ public class PCCBellman {
 
 	
 	//renvoie le plus court chemin entre 2 noeud
-	public String[] pcc(String debut, String fin) {
+	@Override
+	public String[] chemin(String debut, String fin) {
 		if(!calcule) algorithme(debut, fin);
 
 		
@@ -139,7 +142,8 @@ public class PCCBellman {
 	
 	
 	//renvoie la plus courte disctance entre 2 noeud
-	public int ppdistance(String debut, String fin) {
+	@Override
+	public int distance(String debut, String fin) {
 		if(!calcule) algorithme(debut, fin);
 		return d[Arrays.asList(labelsTriNiveau).indexOf(fin)];
 	}

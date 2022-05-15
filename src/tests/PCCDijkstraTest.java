@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 //import graph.GrapheLA;
 import graph.GrapheMA;
-import graph.PCCDijkstra;
+import pcc.PCCDijkstra;
 
 class PCCDijkstraTest {
 
@@ -32,9 +32,9 @@ class PCCDijkstraTest {
 		g.ajouterArc("D","E", 2);
 		g.ajouterArc("F","E", 2);
 		PCCDijkstra toto = new PCCDijkstra(g);
-		toto.algo("A", "D");
-		assertEquals("A-B-C-D", toto.getPath("D"));
-		assertEquals(3, toto.getTotalValue("D"));
+		String[] resAttendu = {"A","B","C","D"};
+		assertArrayEquals(resAttendu, toto.chemin("A","D"));
+		assertEquals(3, toto.distance("A","D"));
 
 		GrapheMA g1 = new GrapheMA(NOEUDS2);
 		assertEquals(NOEUDS2.length, g1.getNbNoeuds());
@@ -43,9 +43,9 @@ class PCCDijkstraTest {
 		g1.ajouterArc("B","A", 1);
 		g1.ajouterArc("A","D", 2);
 		PCCDijkstra toto1 = new PCCDijkstra(g1);
-		toto1.algo("A", "D");
-		assertEquals("A-D", toto1.getPath("D"));
-		assertEquals(2, toto1.getTotalValue("D"));
+		String[] resAttendu2 = {"A","D"};
+		assertArrayEquals(resAttendu2, toto1.chemin("A","D"));
+		assertEquals(2, toto1.distance("A","D"));
 		
 		GrapheMA g3 = new GrapheMA(NOEUDS3);
 		g3.ajouterArc("A","B", 1);
@@ -54,8 +54,8 @@ class PCCDijkstraTest {
 		g3.ajouterArc("D","E", 5);
 		g3.ajouterArc("C","E", 4);
 		PCCDijkstra toto3 = new PCCDijkstra(g3);
-		toto3.algo("A", "D");
-		assertEquals("A-B-D", toto3.getPath("D"));
-		assertEquals(4,toto3.getTotalValue("D"));
+		String[] resAttendu3 = {"A","B","D"};
+		assertArrayEquals(resAttendu3, toto3.chemin("A","D"));
+		assertEquals(4,toto3.distance("A","D"));
 	}
 }

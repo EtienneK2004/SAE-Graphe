@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import graph.GrapheMA;
-import graph.PCCBellman;
+import pcc.PCCBellman;
 
 class PCCBellmanTest {
 	private final static String[] NOEUDS = {"A", "B", "C", "D", "E", "F"};
@@ -47,9 +47,9 @@ class PCCBellmanTest {
 		g.ajouterArc("7", "6", 5);
 		PCCBellman blman = new PCCBellman(g);
 		String[] resAttendu = {"1", "5", "7", "6"};
-		assertArrayEquals(resAttendu, blman.pcc("1", "6"));
+		assertArrayEquals(resAttendu, blman.chemin("1", "6"));
 			
 		
-		assertEquals(16, blman.ppdistance("1", "6"));
+		assertEquals(16, blman.distance("1", "6"));
 	}
 }
