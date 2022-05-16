@@ -1,4 +1,4 @@
-package pcc;
+package pcc.algo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Arrays;
 
 import graph.IGraph;
+import pcc.IPCC;
 
 public class PCCBellman implements IPCC{
 	private static final int INFINI = Integer.MAX_VALUE;

@@ -10,6 +10,8 @@ import java.util.Scanner;
 import graph.IGraph;
 import graph.types.GrapheLA;
 import pcc.*;
+import pcc.algo.PCCBellman;
+import pcc.algo.PCCDijkstra;
 
 public class GrapheImporter {
 	

@@ -1,4 +1,4 @@
-package pcc;
+package pcc.algo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import graph.IGraph;
+import pcc.IPCC;
 
 public class PCCDijkstra implements IPCC{
 	

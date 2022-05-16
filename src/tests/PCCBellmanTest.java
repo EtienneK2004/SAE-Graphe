@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import graph.types.GrapheMA;
 import pcc.IPCC;
-import pcc.PCCBellman;
+import pcc.algo.PCCBellman;
 
 class PCCBellmanTest {
 	private final static String[] NOEUDS = {"A", "B", "C", "D", "E", "F"};

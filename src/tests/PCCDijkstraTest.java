@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import graph.types.GrapheMA;
 import pcc.IPCC;
-import pcc.PCCDijkstra;
+import pcc.algo.PCCDijkstra;
 
 class PCCDijkstraTest {
 
