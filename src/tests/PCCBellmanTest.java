@@ -24,24 +24,7 @@ class PCCBellmanTest {
 			System.out.println(s);
 		return res;
 	}
-	
-	@Test
-	void testTriNiveau() {
-		GrapheMA g = new GrapheMA(NOEUDS);
-		assertEquals(NOEUDS.length, g.getNbNoeuds());
-		g.ajouterArc("A","B", 2);
-		g.ajouterArc("A","E", 2);
-		g.ajouterArc("A","F", 1);
-		g.ajouterArc("B","C", 0);
-		g.ajouterArc("B","D", 4);
-		g.ajouterArc("B","E", 5);
-		g.ajouterArc("C","D", 1);
-		g.ajouterArc("D","E", 2);
-		g.ajouterArc("F","E", 2);
-		PCCBellman blman = new PCCBellman(g);
-		String[] resAttendu = {"A", "F", "B", "C", "D", "E"};
-		assertArrayEquals(resAttendu, blman.getTriNiveau());
-	}
+
 
 	
 	@Test

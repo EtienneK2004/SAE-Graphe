@@ -22,26 +22,21 @@ class PlusCourtTest {
 		listeFichiersB.add("g-10-1.txt");
 		listeFichiersB.add("g-10-2.txt");
 		listeFichiersB.add("g-10-3.txt");
-		//listeFichiersB.add("g-10-4.txt");
-		//Il possède 2 points de départ, celui demandé est plus loin que le 2e, l'algorithme renvoie la distance avec le point de départ le plus proche
+		listeFichiersB.add("g-10-4.txt");
 		
 		listeFichiersB.add("g-10-5.txt");
-		//listeFichiersB.add("g-10-6.txt");
-		//Meme raison que le 4e
+		listeFichiersB.add("g-10-6.txt");
 		listeFichiersB.add("g-10-7.txt");
 		listeFichiersB.add("g-10-8.txt");
-		//listeFichiersB.add("g-10-9.txt");
-		//Meme raison que le 4e
+		listeFichiersB.add("g-10-9.txt");
 		
-		//listeFichiersB.add("g-10-10.txt");
-		//Raison similaire au 4e
+		listeFichiersB.add("g-10-10.txt");
 		
-		//listeFichiersB.add("g-100-1.txt");
-		//listeFichiersB.add("g-100-2.txt");
-		//listeFichiersB.add("g-100-3.txt");
-		//listeFichiersB.add("g-100-4.txt");
-		//listeFichiersB.add("g-100-5.txt");
-		//Raison inconnue, probablement du au nombre de noeuds
+		listeFichiersB.add("g-100-1.txt");
+		listeFichiersB.add("g-100-2.txt");
+		listeFichiersB.add("g-100-3.txt");
+		listeFichiersB.add("g-100-4.txt");
+		listeFichiersB.add("g-100-5.txt");
 		
 		
 		listeFichiersD = new ArrayList<>();

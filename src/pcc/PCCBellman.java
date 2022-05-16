@@ -10,10 +10,9 @@ import graph.IGraph;
 public class PCCBellman implements IPCC{
 	private static final int INFINI = Integer.MAX_VALUE;
 	private IGraph graph;
-	private String[] labelsTriNiveau;
-	private int[] d;       //distances du point de départ
-	private String[] p;    //Prédécesseur optimal pour chaque point
-	private boolean tri = false;
+	private HashMap<String, Integer> d;       //distances du point de départ
+	private HashMap<String, String> p;    //Prédécesseur optimal pour chaque point
+
 	private boolean calcule = false;
 	
 	
@@ -22,128 +21,42 @@ public class PCCBellman implements IPCC{
 	
 	public PCCBellman(IGraph graph) {
 		this.graph = graph;
-		labelsTriNiveau = new String[graph.getNbNoeuds()];
-		d = new int[graph.getNbNoeuds()];
-		p = new String[graph.getNbNoeuds()];
+		d = new HashMap<>();
+		p = new HashMap<>();
 	}
-	
-	private void triNiveau() {
-		int k = 0;
-		int n = graph.getNbNoeuds();
-		HashMap<String,Integer> degPre = new HashMap<>();
-		LinkedList<LinkedList<String>> noeudsTri = new LinkedList<>();
-		
-		
-		//initialisation avec le nombre de predecesseurs
-		for(String X : graph.getLabels()) {
-			degPre.put(X, graph.dIn(X));
+
+	private void algo(String debut) {
+		d = new HashMap<>();
+		p = new HashMap<>();
+		for(String u : graph.getLabels()) {
+			d.put(u, INFINI);
+			p.put(u, null);
 		}
-		
-		//On trouve le sommet de depart, qui n'a pas de predecesseurs
-		for(String X : graph.getLabels()) {
-			if(degPre.get(X) == 0) {
-				LinkedList<String> l = new LinkedList<>();
-				l.push(X);
-				noeudsTri.push(l);
-			}
-		}
-		
-		//On fait une liste pour chaque niveau, chaque liste contient les noeuds du niveau
-		while(noeudsTri.get(k).size() > 0 && k<10) {
-			noeudsTri.addLast(new LinkedList<>());
-			for(String X : noeudsTri.get(k)) {
-				for(String Y : graph.getSucc(X)) {
-					degPre.put(Y, degPre.get(Y)-1);
-					if(degPre.get(Y) == 0) {
-						noeudsTri.get(k+1).push(Y);
+		d.put(debut, 0);
+		for(int k = 1; k<graph.getNbNoeuds();k++) {
+			for(String u : graph.getLabels()) {
+				for(String v : graph.getSucc(u)) {
+					if(d.get(u) >= 0 && d.get(u) < INFINI && d.get(u) + graph.getValeur(u, v) < d.get(v)) {
+						d.put(v, d.get(u) + graph.getValeur(u, v));
+						p.put(v, u);
 					}
 				}
 			}
-			k++;
 		}
 		
-		tri = true;
-		//On transforme la liste de listes en tableau à une dimension
-		
-		for(int i = 0; i<n; i++) {
-			if(noeudsTri.getFirst().size() == 0)
-				noeudsTri.pop();
-			if(noeudsTri.size() > 0 && noeudsTri.getFirst().size() > 0)
-				labelsTriNiveau[i] = noeudsTri.getFirst().pop();
-			else
-				return;
-			
-		}
-		
-		
-		
-		
-		
-	}
 	
-	public String[] getTriNiveau() {
-		if(!tri) {
-			triNiveau();
-		}
-		return labelsTriNiveau;
-	}
-	
-	private int indexOfMinDistance(String label) {
-		int min = -1;
-		int iMin = -1;
-		for(String autreNoeud : graph.getLabels()) {
-			if(graph.aArc(autreNoeud, label)) {
-				int c = graph.getValeur(autreNoeud, label) + d[Arrays.asList(labelsTriNiveau).indexOf(autreNoeud)];
-				if(min == -1 || min > c) {
-					min = c;
-					iMin = Arrays.asList(labelsTriNiveau).indexOf(autreNoeud);
-				}
-			}
-		}
-			
-		return iMin;
-	}
-	
-	
-	
-	//Calcule les plus courtes distances et les predecesseurs optimum
-	private void algorithme(String debut, String fin) {
-		getTriNiveau(); //Fait le tri si il est pas déjà fait
-		
-		d[0] = 0;
-		p[0] = null;
-		int n = graph.getNbNoeuds();
-		for(int i = 1; i < n; i++) {
-			d[i] = INFINI;
-			p[i] = null;
-		}
-		int idxM;
-		for(int i = 1; i < n; i++) {
-			if(labelsTriNiveau[i] != null) {
-				idxM = indexOfMinDistance(labelsTriNiveau[i]);
-				if(idxM != -1) {
-					
-					d[i] = graph.getValeur(labelsTriNiveau[idxM], labelsTriNiveau[i]) + d[idxM];
-					p[i] = labelsTriNiveau[idxM];
-				}
-			}
-		}
-		
-		
-		calcule = true;
-		
 	}
 
 	
 	//renvoie le plus court chemin entre 2 noeud
 	@Override
 	public int chemin(String debut, String fin, ArrayList<String> path) {
-		if(!calcule) algorithme(debut, fin);
+		if(!calcule) algo(debut);
 
 		String nCourant = fin;
 		while(nCourant != null) {
 			path.add(nCourant);
-			nCourant = p[Arrays.asList(labelsTriNiveau).indexOf(nCourant)];
+			nCourant = p.get(nCourant);
 			
 		}
 		
@@ -151,6 +64,8 @@ public class PCCBellman implements IPCC{
 		for(int i = path.size() - 1; i >= 0; --i)
 			pathFinal.add(path.get(i));
 		path.clear();
+		if(!(pathFinal.get(0).equals(debut) && pathFinal.get(pathFinal.size()-1).equals(fin)) )
+			return Integer.MAX_VALUE;
 		for(int i = 0; i < pathFinal.size(); i++)
 			path.add(pathFinal.get(i));
 		return graph.distance(path);
@@ -160,7 +75,48 @@ public class PCCBellman implements IPCC{
 	//renvoie la plus courte distance entre 2 noeud
 	@Override
 	public int distance(String debut, String fin) {
-		if(!calcule) algorithme(debut, fin);
-		return d[Arrays.asList(labelsTriNiveau).indexOf(fin)];
+		if(!calcule) algo(debut);
+		return d.get(fin);
+	}
+	
+	/*
+	private boolean ExistChemin(String u, String v):
+	    int n = graph.getNbNoeuds(); 
+	    LinkedList<String> file = new LinkedList<>();
+	    boolean[] visites = new boolean[n];
+	    visites = Arrays.fill(false);
+	    file.addLast(u);
+	    String courant;
+	    while(file.size() > 0){
+	        courant = file.pull();
+	        visites[courant] = true;
+	        for(String i : graph.getLabels(){
+	            if (graph.aArc(courant, i) && visites[i] == false){
+	                file.addLast(i);
+	                visites[i] = true;
+	            }
+	
+	            else if (graph.aArc(courant, i) && i == v:
+	                return True
+	        }
+	    } 
+	    return False
+                            
+/*
+	def estCycle(matriceAdj):
+	    n = len(matriceAdj)
+	    for i in range(n):
+	        if ExistChemin(matriceAdj, i, i) == True:
+	            return True
+	    return False
+
+
+		 */
+
+	@Override
+	public boolean estOK() {
+		
+		
+		return true;
 	}
 }

@@ -23,10 +23,18 @@ public class PCCDijkstra implements IPCC{
 		}
 	}
 	
+	private class ArcNegatifExeption extends RuntimeException{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+	}
+	
 	
 	private Map<String, Node> nodes;	
 	IGraph graph = null;
-	private boolean calcule = false;
 	
 	/**
 	 * Cree l'objet PCCDijkstra qui pourra etre utilise pour n'importe quel noeud d'un meme graphe.
@@ -114,6 +122,8 @@ public class PCCDijkstra implements IPCC{
 	 */
 	public void algo(String begin_node, String end_node) {
 		//System.out.println("Debut de l'algorithme de Dijkstra.");
+		if(!estOK())
+			throw new ArcNegatifExeption();
 		nodes.clear();
 		
 		for(String name : graph.getLabels()) {
@@ -131,7 +141,6 @@ public class PCCDijkstra implements IPCC{
 		
 		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
 		//System.out.println();
-		calcule = true;
 	}
 
 	@Override
@@ -164,6 +173,17 @@ public class PCCDijkstra implements IPCC{
 		
 		
 		return graph.distance(path);
+	}
+	
+	public boolean estOK() {
+		for(Node node : nodes.values()) {
+			for(String node2 : graph.getSucc(node.name)) {
+				if(graph.aArc(node.name, node2))
+						if(graph.getValeur(node.name, node2) < 0)
+							return false;
+			}
+		}
+		return true;
 	}
 		
 }

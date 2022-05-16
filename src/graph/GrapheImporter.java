@@ -11,8 +11,6 @@ import pcc.*;
 
 public class GrapheImporter {
 	
-	private static final int INFINI = Integer.MAX_VALUE;
-	
 	public static void main(String[] args) throws NumberFormatException, FileNotFoundException, IOException {
 		String fileName = "graphes/ac/g-10-1.txt";
 		System.out.println();
