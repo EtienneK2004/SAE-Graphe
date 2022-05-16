@@ -2,9 +2,9 @@ package tests;
 // Test donnés dans le sujet
 import static org.junit.jupiter.api.Assertions.*;
 
-import graph.GrapheMA;
-
 import org.junit.jupiter.api.Test;
+
+import graph.types.GrapheMA;
 
 class GrapheMATest {
 	private final static String[] NOEUDS = {"1", "2", "3", "4", "5", "6"};

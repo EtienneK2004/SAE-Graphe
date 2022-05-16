@@ -6,13 +6,14 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-import graph.GrapheMA;
+import graph.types.GrapheMA;
 import pcc.IPCC;
 import pcc.PCCBellman;
 
 class PCCBellmanTest {
 	private final static String[] NOEUDS = {"A", "B", "C", "D", "E", "F"};
 	private final static String[] NOEUDS2 = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+	private final static String[] NOEUDS3 = {"A", "B", "C", "D"};
 	
 	private String[] toTab(String entrant, String sortant, IPCC pcc) {
 		ArrayList<String> path = new ArrayList<>();
@@ -20,8 +21,6 @@ class PCCBellmanTest {
 		String[] res = new String[path.size()];
 		for(int i = 0; i < path.size(); ++i)
 			res[i] = path.get(i);
-		for(String s : res)
-			System.out.println(s);
 		return res;
 	}
 
@@ -49,5 +48,29 @@ class PCCBellmanTest {
 			
 		
 		assertEquals(16, blman.distance("1", "6"));
+	}
+	
+	@Test
+	void testNotOk() {
+		GrapheMA g = new GrapheMA(NOEUDS3);
+		g.ajouterArc("A", "B", 1);
+		g.ajouterArc("B", "C", 1);
+		g.ajouterArc("B", "D", 1);
+		g.ajouterArc("C", "A", 1);
+		PCCBellman blman = new PCCBellman(g);
+		assertFalse(blman.estOK());
+		
+	}
+	
+	@Test
+	void testOk() {
+		GrapheMA g = new GrapheMA(NOEUDS3);
+		g.ajouterArc("A", "B", 1);
+		g.ajouterArc("B", "C", 1);
+		g.ajouterArc("B", "D", 1);
+		g.ajouterArc("A", "D", 1);
+		PCCBellman blman = new PCCBellman(g);
+		assertTrue(blman.estOK());
+		
 	}
 }

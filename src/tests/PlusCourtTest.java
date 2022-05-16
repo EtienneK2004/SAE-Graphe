@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import graph.GrapheImporter;
+import graph.ihm.GrapheImporter;
 
 class PlusCourtTest {
 	private static final String REPERTOIRE_ENONCE = "graphes/";

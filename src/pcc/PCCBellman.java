@@ -1,9 +1,9 @@
 package pcc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Arrays;
 
 import graph.IGraph;
 
@@ -51,6 +51,7 @@ public class PCCBellman implements IPCC{
 	//renvoie le plus court chemin entre 2 noeud
 	@Override
 	public int chemin(String debut, String fin, ArrayList<String> path) {
+		assert(estOK());
 		if(!calcule) algo(debut);
 
 		String nCourant = fin;
@@ -79,44 +80,47 @@ public class PCCBellman implements IPCC{
 		return d.get(fin);
 	}
 	
-	/*
-	private boolean ExistChemin(String u, String v):
+	private boolean ExistChemin(String u, String v) {
 	    int n = graph.getNbNoeuds(); 
 	    LinkedList<String> file = new LinkedList<>();
-	    boolean[] visites = new boolean[n];
-	    visites = Arrays.fill(false);
+	    HashMap<String, Boolean> visites = new HashMap<>();
+	    for(String label : graph.getLabels()) {
+	    	visites.put(label, false);
+	    }
 	    file.addLast(u);
 	    String courant;
 	    while(file.size() > 0){
-	        courant = file.pull();
-	        visites[courant] = true;
-	        for(String i : graph.getLabels(){
-	            if (graph.aArc(courant, i) && visites[i] == false){
+	        courant = file.removeFirst();
+	        visites.put(courant, true);
+	        for(String i : graph.getLabels()){
+	            if (graph.aArc(courant, i) && visites.get(i) == false){
 	                file.addLast(i);
-	                visites[i] = true;
+	                visites.put(i, true);
 	            }
 	
-	            else if (graph.aArc(courant, i) && i == v:
-	                return True
+	            else if (graph.aArc(courant, i) && i == v)
+	                return true;
 	        }
 	    } 
-	    return False
+	    return false;
+	}
                             
-/*
-	def estCycle(matriceAdj):
-	    n = len(matriceAdj)
-	    for i in range(n):
-	        if ExistChemin(matriceAdj, i, i) == True:
-	            return True
-	    return False
+
+	private boolean estCycle() {
+	    int n = graph.getNbNoeuds();
+	    for(String i : graph.getLabels())
+	        if (ExistChemin(i, i) == true)
+	            return true;
+	    return false;
+	}
 
 
-		 */
+		 
 
 	@Override
 	public boolean estOK() {
 		
 		
-		return true;
+		return !estCycle();
 	}
 }

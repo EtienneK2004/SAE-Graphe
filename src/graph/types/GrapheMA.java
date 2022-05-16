@@ -1,8 +1,10 @@
-package graph;
+package graph.types;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import graph.IGraph;
 
 public class GrapheMA implements IGraph {
 	private Map<String, Integer> noeuds;

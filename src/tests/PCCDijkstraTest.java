@@ -7,8 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
-//import graph.GrapheLA;
-import graph.GrapheMA;
+import graph.types.GrapheMA;
 import pcc.IPCC;
 import pcc.PCCDijkstra;
 

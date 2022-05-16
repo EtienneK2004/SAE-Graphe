@@ -2,8 +2,9 @@ package tests;
 // Test donnés dans le sujet
 import static org.junit.jupiter.api.Assertions.*;
 
-import graph.GrapheLA;
 import org.junit.jupiter.api.Test;
+
+import graph.types.GrapheLA;
 
 class GrapheLATest {
 	private final static String[] NOEUDS = {"1", "2", "3", "4", "5", "6"};
