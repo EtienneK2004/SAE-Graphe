@@ -13,7 +13,6 @@ public class PCCBellman implements IPCC{
 	private HashMap<String, Integer> d;       //distances du point de départ
 	private HashMap<String, String> p;    //Prédécesseur optimal pour chaque point
 
-	private boolean calcule = false;
 	
 	
 	
@@ -48,11 +47,17 @@ public class PCCBellman implements IPCC{
 	}
 
 	
-	//renvoie le plus court chemin entre 2 noeud
+	/*
+	 * @brief renvoie le plus court chemin entre 2 noeud
+	 * @param debut, noeud de départ
+	 * @param fin, noeud d'arrivée
+	 * @param path, sera remplacé par le chemin du plus court chemin entre les 2 noeuds
+	 * @return la distance totale du chemin
+	 */
 	@Override
 	public int chemin(String debut, String fin, ArrayList<String> path) {
 		assert(estOK());
-		if(!calcule) algo(debut);
+		algo(debut);
 
 		String nCourant = fin;
 		while(nCourant != null) {
@@ -73,13 +78,24 @@ public class PCCBellman implements IPCC{
 	}
 	
 	
-	//renvoie la plus courte distance entre 2 noeud
+	/*
+	 * @brief Calcule la plus courte distance entre 2 noeuds
+	 * @param debut, noeud de départ
+	 * @param fin, noeud d'arrivée
+	 * @return la plus courte distance entre les 2 noeuds
+	 */
 	@Override
 	public int distance(String debut, String fin) {
-		if(!calcule) algo(debut);
+		algo(debut);
 		return d.get(fin);
 	}
 	
+	/*
+	 * @brief Determine si un chemin est possible entre 2 noeuds
+	 * @param u, noeud de départ
+	 * @param v, noeud d'arrivée
+	 * @return true si un chemin existe, false sinon
+	 */
 	private boolean ExistChemin(String u, String v) {
 	    LinkedList<String> file = new LinkedList<>();
 	    HashMap<String, Boolean> visites = new HashMap<>();
@@ -104,7 +120,10 @@ public class PCCBellman implements IPCC{
 	    return false;
 	}
                             
-
+	/*
+	 * @brief Determine si le graphe est cyclique
+	 * @return true si le graphe possède un cycle, false sinon
+	 */
 	private boolean estCycle() {
 	    for(String i : graph.getLabels())
 	        if (ExistChemin(i, i) == true)
@@ -114,7 +133,10 @@ public class PCCBellman implements IPCC{
 
 
 		 
-
+	/*
+	 * @brief Determine si le graphe est compatible avec l'algorithme
+	 * @return true si il est compatible, false sinon
+	 */
 	@Override
 	public boolean estOK() {
 		

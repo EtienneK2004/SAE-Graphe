@@ -72,19 +72,6 @@ public class PCCDijkstra implements IPCC{
 	}
 	
 	/**
-	 * Affiche le resultat de l'algorithme.
-	 */
-	/*public void DisplayNodes() {
-		for(String name : graph.getLabels()) {
-			Node node = nodes.get(name);
-			// (node.closed ? "closed" : "opened")  c'est pour savoir si il est déjà allé dessus
-			System.out.print("[" + node.name + "] -> " + (node.total_value == Integer.MAX_VALUE ? "I" : node.total_value) + 
-					"("+ (node.previous_node != null ? node.previous_node.name : " ") + ") ");
-		}
-		System.out.println();
-	}*/
-	
-	/**
 	 * Effectue l'agorithme de Dijkstra en prennant des entiers.
 	 * 
 	 * @param begin_node , noeud de depart pour faire l'algorithme.
@@ -139,11 +126,14 @@ public class PCCDijkstra implements IPCC{
 		node.total_value = 0;
 		
 		Dijkstra();		
-		
-		//System.out.println("Le plus court chemin partant du noeud \"" + begin_node + "\" vers le noeud \"" + end_node + "\" est : " + path);
-		//System.out.println();
 	}
 
+	/*
+	 * @brief Calcule la plus courte distance entre 2 noeuds
+	 * @param debut, noeud de départ
+	 * @param fin, noeud d'arrivée
+	 * @return la plus courte distance entre les 2 noeuds
+	 */
 	@Override
 	public int distance(String entrant, String sortant) {
 		algo(entrant, sortant);
@@ -151,6 +141,13 @@ public class PCCDijkstra implements IPCC{
 		return node.total_value;
 	}
 
+	/*
+	 * @brief Renvoie le plus court chemin entre 2 noeud
+	 * @param debut, noeud de départ
+	 * @param fin, noeud d'arrivée
+	 * @param path, sera remplacé par le chemin du plus court chemin entre les 2 noeuds
+	 * @return la distance totale du chemin
+	 */
 	@Override
 	public int chemin(String entrant, String sortant, ArrayList<String> path) {
 		algo(entrant, sortant);
@@ -176,6 +173,10 @@ public class PCCDijkstra implements IPCC{
 		return graph.distance(path);
 	}
 	
+	/*
+	 * @brief Determine si le graphe est compatible avec l'algorithme
+	 * @return true si il est compatible, false sinon
+	 */
 	public boolean estOK() {
 		for(Node node : nodes.values()) {
 			for(String node2 : graph.getSucc(node.name)) {
