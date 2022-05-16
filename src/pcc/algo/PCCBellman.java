@@ -3,7 +3,6 @@ package pcc.algo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Arrays;
 
 import graph.IGraph;
 import pcc.IPCC;
@@ -82,7 +81,6 @@ public class PCCBellman implements IPCC{
 	}
 	
 	private boolean ExistChemin(String u, String v) {
-	    int n = graph.getNbNoeuds(); 
 	    LinkedList<String> file = new LinkedList<>();
 	    HashMap<String, Boolean> visites = new HashMap<>();
 	    for(String label : graph.getLabels()) {
@@ -108,7 +106,6 @@ public class PCCBellman implements IPCC{
                             
 
 	private boolean estCycle() {
-	    int n = graph.getNbNoeuds();
 	    for(String i : graph.getLabels())
 	        if (ExistChemin(i, i) == true)
 	            return true;

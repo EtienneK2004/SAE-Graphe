@@ -1,4 +1,4 @@
-package graph.ihm;
+package ihmPourGraph;
 
 public class Arc {
 	private int source, valuation, destination;

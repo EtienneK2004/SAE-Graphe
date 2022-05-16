@@ -1,4 +1,4 @@
-package graph.ihm;
+package ihmPourGraph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -213,6 +213,7 @@ public class GrapheImporter {
 	 * @return distance
 	 * @throws FileNotFoundException
 	 */
+	@SuppressWarnings("resource")
 	public static int importerReponse(String filePath, List<String> chemin) throws FileNotFoundException {
 		File file = new File(filePath);
 		Scanner sc = new Scanner(file);
