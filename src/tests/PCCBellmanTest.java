@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import graph.types.GrapheMA;
-import pcc.IPCC;
 import pcc.algo.PCCBellman;
 
 class PCCBellmanTest {
@@ -15,7 +14,7 @@ class PCCBellmanTest {
 	private final static String[] NOEUDS2 = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 	private final static String[] NOEUDS3 = {"A", "B", "C", "D"};
 	
-	private String[] toTab(String entrant, String sortant, IPCC pcc) {
+	private String[] toTab(String entrant, String sortant, PCCBellman pcc) {
 		ArrayList<String> path = new ArrayList<>();
 		pcc.chemin(entrant,sortant, path);
 		String[] res = new String[path.size()];

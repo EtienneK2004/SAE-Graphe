@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import graph.types.GrapheMA;
-import pcc.IPCC;
 import pcc.algo.PCCDijkstra;
 
 class PCCDijkstraTest {
@@ -20,7 +19,7 @@ class PCCDijkstraTest {
 	
 	// Rajouter un boolean dans les classe de graphe dès qu'il y a une pondération négative la fonction estOK
 	
-	private String[] toTab(String entrant, String sortant, IPCC pcc) {
+	private String[] toTab(String entrant, String sortant, PCCDijkstra pcc) {
 		ArrayList<String> path = new ArrayList<>();
 		pcc.chemin(entrant, sortant, path);
 		String[] res = new String[path.size()];

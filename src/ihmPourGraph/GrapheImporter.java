@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 import graph.IGraph;
 import graph.types.GrapheLA;
-import pcc.*;
+import pcc.IPCC;
 import pcc.algo.PCCBellman;
 import pcc.algo.PCCDijkstra;
 
